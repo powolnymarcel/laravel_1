@@ -16,13 +16,28 @@
 
 Route::get('/', function () {
     return view('accueil');
+})->name('accueil');
+
+Route::group(['prefix'=> 'action'],function(){
+    Route::get('/salut/{nom?}', function ($nom = null) {
+        return view('actions.salut',['nom' => $nom]);
+    })->name('salut');
+    Route::get('/calin/{nom?}', function ($nom = null) {
+        return view('actions.calin',['nom' => $nom]);
+    })->name('calin');
+    Route::get('/bisous/{nom?}', function ($nom = null) {
+        return view('actions.bisous',['nom' => $nom]);
+    })->name('bisous');
+
+    Route::post('/', function (\Illuminate\Http\Request $request) {
+        if(isset($request['action']) && $request['nom']){
+            if(strlen($request['nom']) >0 ){
+                return view('actions.nice',['action' => $request['action'],'nom'=>$request['nom']]);
+            }
+            return redirect()->back();
+        }
+        return redirect()->back();
+    })->name('sympa');
+
 });
-Route::get('/salut/{nom?}', function ($nom = null) {
-    return view('actions.salut',['nom' => $nom]);
-})->name('salut');
-Route::get('/calin/{nom?}', function ($nom = null) {
-    return view('actions.calin',['nom' => $nom]);
-})->name('calin');
-Route::get('/bisous/{nom?}', function ($nom = null) {
-    return view('actions.bisous',['nom' => $nom]);
-})->name('bisous');
+
