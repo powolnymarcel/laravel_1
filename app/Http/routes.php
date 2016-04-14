@@ -14,30 +14,26 @@
 
 
 
+//As of 5.2, routes.php is by default already called in the context of a ['middleware'=>'web'] by RouteServiceProvider.
+// But in routes.php default generation of auth routes, the Route::group call is still happening by default - so if you delete that Route::group
+// declaration from routes.php the application then correctly shows errors.
+
+
+
 Route::get('/', function () {
-    return view('accueil');
-})->name('accueil');
+        return view('accueil');
+    })->name('accueil');
 
-Route::group(['prefix'=> 'action'],function(){
-    Route::get('/salut/{nom?}', function ($nom = null) {
-        return view('actions.salut',['nom' => $nom]);
-    })->name('salut');
-    Route::get('/calin/{nom?}', function ($nom = null) {
-        return view('actions.calin',['nom' => $nom]);
-    })->name('calin');
-    Route::get('/bisous/{nom?}', function ($nom = null) {
-        return view('actions.bisous',['nom' => $nom]);
-    })->name('bisous');
+    Route::group(['prefix'=> 'action'],function(){
+        Route::get('/{action}/{nom?}',[
+            'uses' =>'sympaController@recupererActionSympa',
+            'as' => 'actionSympa'
+        ]);
 
-    Route::post('/', function (\Illuminate\Http\Request $request) {
-        if(isset($request['action']) && $request['nom']){
-            if(strlen($request['nom']) >0 ){
-                return view('actions.nice',['action' => $request['action'],'nom'=>$request['nom']]);
-            }
-            return redirect()->back();
-        }
-        return redirect()->back();
-    })->name('sympa');
+        Route::post('/',[
+            'uses'=>'sympaController@posterActionSympa',
+            'as' => 'sympa'
 
-});
+        ]);
 
+    });

@@ -3,10 +3,19 @@
 @section('contenu')
     <div class="row">
         <div class="col-md-12">
-            <a href="{{route("salut")}}">Salut</a>
-            <a href="{{route("calin")}}">calin</a>
-            <a href="{{route("bisous")}}">bisous</a>
+            <a href="{{route("actionSympa",['action'=>'salut'])}}">Salut</a>
+            <a href="{{route("actionSympa",['action'=>'calin'])}}">calin</a>
+            <a href="{{route("actionSympa",['action'=>'bisous'])}}">bisous</a>
+
             <br>
+
+
+            @if($errors->has())
+                @foreach ($errors->all() as $error)
+                    <div>{{ $error }}</div>
+                @endforeach
+            @endif
+
             <form action="{{route("sympa")}}" method="POST">
                 <label for="leSelect">Selectionner action</label>
                 <select name="action" id="leSelect">
