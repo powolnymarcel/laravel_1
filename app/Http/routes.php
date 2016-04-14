@@ -19,10 +19,11 @@
 // declaration from routes.php the application then correctly shows errors.
 
 
+Route::get('/',[
+    'uses' =>'sympaController@recupAccueil',
+    'as' => 'accueil'
+]);
 
-Route::get('/', function () {
-        return view('accueil');
-    })->name('accueil');
 
     Route::group(['prefix'=> 'action'],function(){
         Route::get('/{action}/{nom?}',[
@@ -30,9 +31,9 @@ Route::get('/', function () {
             'as' => 'actionSympa'
         ]);
 
-        Route::post('/',[
-            'uses'=>'sympaController@posterActionSympa',
-            'as' => 'sympa'
+        Route::post('/ajouterAction',[
+            'uses'=>'sympaController@posterAjouterAction',
+            'as' => 'ajouterAction'
 
         ]);
 
